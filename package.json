@@ -7,7 +7,7 @@
     },
     "scripts": {
         "build": "webpack --mode production",
-        "start": "webpack-dev-server --mode development --openssl-legacy-provider"
+        "start": "webpack-dev-server --mode development --open"
     },
     "engines": {
         "node": "12.16.2",
