@@ -45,12 +45,16 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                role: user.role,
                 token: 'fake-jwt-token'
             })
         }
 
         function register() {
-            const user = body
+            const user = body;
+            if (!user.role) {
+                user.role = 'user';
+            }          
 
             if (users.find(x => x.username === user.username)) {
                 return error('Username "' + user.username + '" is already taken')

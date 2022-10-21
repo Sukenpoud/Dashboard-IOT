@@ -3,7 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AlertService, AuthenticationService } from '@/_services';
+import { AlertService, AuthenticationService, UserService } from '@/_services';
+
+// array in local storage for registered users
+let users = JSON.parse(localStorage.getItem('users')) || [];
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -11,13 +14,15 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
+    
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private userService: UserService
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
@@ -33,6 +38,38 @@ export class LoginComponent implements OnInit {
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+
+        if (!users.find(x => x.username === "admin")){
+            this.userService.register(
+                {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    username: 'admin',
+                    password: 'adminpass',
+                    role: 'admin',
+                    id: 0,
+                    token: ''
+                })
+                .pipe(first())
+                .subscribe();
+        }
+        if (!users.find(x => x.username === "superadmin")){
+            this.userService.register(
+                {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    username: 'superadmin',
+                    password: 'superadminpass',
+                    role: 'superadmin',
+                    id: 1,
+                    token: ''
+                })
+                .pipe(first())
+                .subscribe();
+        }
+     
+        
     }
 
     // convenience getter for easy access to form fields
