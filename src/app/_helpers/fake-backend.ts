@@ -5,6 +5,7 @@ import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 
 // array in local storage for registered users
 let users = JSON.parse(localStorage.getItem('users')) || [];
+let pois = JSON.parse(localStorage.getItem('pois')) || [];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -28,6 +29,12 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getUsers();
                 case url.match(/\/users\/\d+$/) && method === 'DELETE':
                     return deleteUser();
+                case url.endsWith('/poi/add') && method === 'POST':
+                    return addPoi();
+                case url.endsWith('/poi') && method === 'GET':
+                    return getPoi();
+                case url.match(/\/poi\/\d+$/) && method === 'DELETE':
+                    return deletePoi();
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -77,6 +84,30 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             users = users.filter(x => x.id !== idFromUrl());
             localStorage.setItem('users', JSON.stringify(users));
+            return ok();
+        }
+
+        // POI
+        function addPoi() {
+            const poi = body;      
+
+            poi.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
+            pois.push(poi);
+            localStorage.setItem('pois', JSON.stringify(pois));
+
+            return ok();
+        }
+
+        function getPoi() {
+            if (!isLoggedIn()) return unauthorized();
+            return ok(pois);
+        }
+
+        function deletePoi() {
+            if (!isLoggedIn()) return unauthorized();
+
+            pois = pois.filter(x => x.id !== idFromUrl());
+            localStorage.setItem('pois', JSON.stringify(pois));
             return ok();
         }
 

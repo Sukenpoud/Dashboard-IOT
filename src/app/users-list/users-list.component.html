@@ -1,4 +1,31 @@
 ﻿<h1>Bonjour {{currentUser.firstName}}</h1>
-<h2>Votre rôle : {{currentUser.role}}</h2>
 
-LISTE USERS
+<h3>Tous les utilisateurs enregistrés :</h3>
+<p>Vous êtes connecté en tant que : {{currentUser.role}}.</p>
+<p *ngIf="isAdmin == true">Vous pouvez modifier les comptes utilisateurs sauf les autres administrateurs.</p>
+<p *ngIf="isSuperAdmin == true">Vous pouvez modifier tous les comptes utilisateurs.</p>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#ID</th>
+        <th scope="col">Pseudo</th>
+        <th scope="col">Prénom</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Rôle</th>
+        <th scope="col">Actions</th>
+        <th scope="col">Droits d'écriture</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <th scope="row">{{user.id}}</th>
+        <td>{{user.username}}</td>
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.role}}</td>
+        <td><span *ngIf="user.role !== 'superadmin' && user.role !== 'admin' && (isAdmin || isSuperAdmin)"><a (click)="editUser(user.id)" class="me-2"><button type="button" class="btn btn-success" >Modifier</button></a><a (click)="deleteUser(user.id)"><button type="button" class="btn btn-danger" >Supprimer</button></a></span></td>
+        <td><input type="checkbox" name="userrights" value=""></td>
+       </tr>
+    </tbody>
+  </table>

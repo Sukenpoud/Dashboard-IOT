@@ -3,7 +3,7 @@
 <div id="body-pd">
     <header class="header" id="header" *ngIf="currentUser">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+        <div class="header_img"> <img src="https://pickaface.net/gallery/avatar/unr_randomguy_190409_1742_4g5.png" alt=""> </div>
     </header>
     <div class="l-navbar" id="nav-bar" *ngIf="currentUser">
         <nav class="nav">
@@ -19,9 +19,7 @@
 <!-- main app container -->
 <div class="main-app">
     <div class="container">
-            <div class="col-sm-6 offset-sm-3">
-                <alert></alert>
-                <router-outlet></router-outlet>
-            </div>
+        <alert></alert>
+        <router-outlet></router-outlet>
     </div>
 </div>
